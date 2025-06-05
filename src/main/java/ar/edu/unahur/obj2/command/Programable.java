@@ -12,6 +12,8 @@ public interface Programable {
 
     Integer getProgramCounter();
 
+    void setProgramCounter(Integer value);
+
     void setAcumuladorA(Integer value);
 
     Integer getAcumuladorA();
@@ -26,7 +28,7 @@ public interface Programable {
 
     void reset();
 
-    void setAddr(Integer addr);
+    void setAddr(Integer addr, Integer valor);
 
     Integer getAddr(Integer addr);
 }
