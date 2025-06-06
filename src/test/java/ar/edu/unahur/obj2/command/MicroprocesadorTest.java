@@ -2,7 +2,12 @@ package ar.edu.unahur.obj2.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
+
+import ar.edu.unahur.obj2.command.comandos.Add;
+import ar.edu.unahur.obj2.command.comandos.Operable;
 
 public class MicroprocesadorTest {
     
@@ -82,5 +87,47 @@ public class MicroprocesadorTest {
         micro.undo();        
         assertEquals(0, micro.getAcumuladorA());
         assertEquals(0, micro.getAcumuladorB());
+    }
+
+    @Test
+    public void testIfnzEjecutaBloqueSiAcumuladorNoEsCero() {
+        var micro = new Microprocesador();
+        var programa = new ProgramBuilder()
+            .lodV(5) 
+            .ifnz(List.of(
+                new Operable() {
+                    public void execute(Programable micro) {
+                        micro.setAcumuladorA(micro.getAcumuladorA() + 10);
+                        
+                    }
+                    public void undo(Programable micro) {}
+                }
+            ))
+            .build();
+
+        micro.run(programa);
+        assertEquals(15, micro.getAcumuladorA());
+        assertEquals(2, micro.getProgramCounter()); 
+    }
+
+    @Test
+    public void testWhnzEjecutaMientrasAcumuladorNoEsCero() {
+        var micro = new Microprocesador();
+        var programa = new ProgramBuilder()
+            .lodV(3) 
+            .whnz(List.of(
+                new Operable() {
+                    public void execute(Programable micro) {
+                        micro.setAcumuladorA(micro.getAcumuladorA() - 1);
+                        
+                    }
+                    public void undo(Programable micro) {}
+                }
+            ))
+            .build();
+
+        micro.run(programa);
+        assertEquals(0, micro.getAcumuladorA());
+        assertEquals(2, micro.getProgramCounter()); 
     }
 }
