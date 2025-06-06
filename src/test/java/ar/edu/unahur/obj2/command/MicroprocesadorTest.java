@@ -53,4 +53,34 @@ public class MicroprocesadorTest {
         assertEquals(15, micro.getAcumuladorA());
         assertEquals(0, micro.getAcumuladorB());
     }
+
+    @Test
+    public void undoSwapYAdd(){
+        var micro = new Microprocesador();
+        var programa = new ProgramBuilder()
+            .lodV(20)
+            .swap()
+            .lodV(10)
+            .add()
+            .build();
+        micro.run(programa);
+        assertEquals(30, micro.getAcumuladorA());
+        assertEquals(0, micro.getAcumuladorB());
+
+        micro.undo();
+        assertEquals(10, micro.getAcumuladorA());
+        assertEquals(20, micro.getAcumuladorB());
+
+        micro.undo();        
+        assertEquals(0, micro.getAcumuladorA());
+        assertEquals(20, micro.getAcumuladorB());
+
+        micro.undo();        
+        assertEquals(20, micro.getAcumuladorA());
+        assertEquals(0, micro.getAcumuladorB());
+
+        micro.undo();        
+        assertEquals(0, micro.getAcumuladorA());
+        assertEquals(0, micro.getAcumuladorB());
+    }
 }

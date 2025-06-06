@@ -12,11 +12,13 @@ public class Microprocesador implements Programable {
     private Integer acumuladorB = 0;
     private Integer programCounter = 0;
     private Map<Integer, Integer> memoria = new HashMap<>();
+    private Instruccion instrucciones = new Instruccion();
 
 
     @Override
     public void run(List<Operable> operaciones) {
         while (programCounter < operaciones.size()) {
+            instrucciones.agregarInstruccion(this.copy());
             operaciones.get(programCounter).execute(this);
         }
     }
@@ -98,6 +100,12 @@ public class Microprocesador implements Programable {
     private void verificarRango(Integer addr){
         if (addr < 0 || addr > 1023){
             throw new MicroException("Dirección fuera de rango: " + addr);
+        }
+    }
+
+    public void undo(){
+        if(instrucciones.hayInstruccion()){
+            this.copyFrom(instrucciones.ultimaInstruccion());
         }
     }
 
